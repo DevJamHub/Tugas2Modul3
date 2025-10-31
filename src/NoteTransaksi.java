@@ -2,63 +2,63 @@ import java.util.ArrayList;
 
 /**
  * Kelas {@code NoteTransaksi} digunakan untuk menyimpan data pemasukan dan pengeluaran.
- * Kelas ini juga menyediakan metode untuk menghitung total dan menghapus data transaksi.
+ * Setiap transaksi memiliki atribut jenis, jumlah, tanggal, kategori, dan keterangan.
  */
 public class NoteTransaksi {
 
-    private ArrayList<Double> daftarPemasukan = new ArrayList<>();   // Daftar semua pemasukan
-    private ArrayList<Double> daftarPengeluaran = new ArrayList<>(); // Daftar semua pengeluaran
+    private ArrayList<Transaksi> daftarTransaksi = new ArrayList<>();
 
     /**
-     * Konstruktor default tanpa parameter.
+     * Menambahkan transaksi baru ke daftar.
+     * @param jenis jenis transaksi (Pemasukan/Pengeluaran)
+     * @param jumlah nilai transaksi
+     * @param kategori kategori transaksi
+     * @param keterangan deskripsi tambahan
      */
-    public NoteTransaksi() {}
+    public void tambahTransaksi(String jenis, double jumlah, String kategori, String keterangan) {
+        Transaksi transaksi = new Transaksi(jenis, jumlah, kategori, keterangan);
+        daftarTransaksi.add(transaksi);
+    }
 
     /**
-     * Menghitung total nilai dari daftar yang diberikan.
-     * @param daftar daftar nilai (pemasukan/pengeluaran)
-     * @return total keseluruhan dari daftar
+     * Menghitung total berdasarkan jenis transaksi.
+     * @param jenis "Pemasukan" atau "Pengeluaran"
+     * @return total keseluruhan
      */
-    public double hitungTotal(ArrayList<Double> daftar) {
+    public double hitungTotal(String jenis) {
         double total = 0;
-        for (double nilai : daftar) {
-            total += nilai;
+        for (Transaksi t : daftarTransaksi) {
+            if (t.getJenis().equalsIgnoreCase(jenis)) {
+                total += t.getJumlah();
+            }
         }
         return total;
     }
 
     /**
-     * Menghitung sisa keuangan dari total pemasukan dikurangi total pengeluaran.
-     * @return sisa keuangan
+     * Menampilkan seluruh transaksi dengan format tabel.
      */
-    public double hitungSisaKeuangan() {
-        return hitungTotal(daftarPemasukan) - hitungTotal(daftarPengeluaran);
+    public void tampilkanSemuaTransaksi() {
+        if (daftarTransaksi.isEmpty()) {
+            System.out.println("Belum ada transaksi yang tercatat.");
+            return;
+        }
+
+        System.out.printf("%-20s %-15s %-15s %-15s %-20s%n",
+                "Tanggal", "Jenis", "Jumlah", "Kategori", "Keterangan");
+        System.out.println("----------------------------------------------------------------------------");
+
+        for (Transaksi t : daftarTransaksi) {
+            System.out.printf("%-20s %-15s Rp %-13.0f %-15s %-20s%n",
+                    t.getTanggal(), t.getJenis(), t.getJumlah(), t.getKategori(), t.getKeterangan());
+        }
     }
 
     /**
-     * Menghapus semua data pemasukan dan pengeluaran.
+     * Menghapus semua data transaksi.
      */
     public void hapusData() {
-        daftarPemasukan.clear();
-        daftarPengeluaran.clear();
+        daftarTransaksi.clear();
         System.out.println("🗑️ Semua data transaksi telah dihapus!");
-    }
-
-    // ======== Getter & Setter ========
-
-    public ArrayList<Double> getDaftarPemasukan() {
-        return daftarPemasukan;
-    }
-
-    public void setDaftarPemasukan(ArrayList<Double> daftarPemasukan) {
-        this.daftarPemasukan = daftarPemasukan;
-    }
-
-    public ArrayList<Double> getDaftarPengeluaran() {
-        return daftarPengeluaran;
-    }
-
-    public void setDaftarPengeluaran(ArrayList<Double> daftarPengeluaran) {
-        this.daftarPengeluaran = daftarPengeluaran;
     }
 }

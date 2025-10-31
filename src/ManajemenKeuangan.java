@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-
 /**
  * Kelas {@code ManajemenKeuangan} bertanggung jawab untuk mengelola data keuangan pengguna,
  * termasuk pemasukan, pengeluaran, saldo, dan menampilkan laporan keuangan.
@@ -7,20 +5,12 @@ import java.util.ArrayList;
  */
 public class ManajemenKeuangan {
 
-    // Batas saldo minimum untuk menampilkan peringatan
     public static final int BATAS_SALDO_RENDAH = 100000;
 
-    // Objek penyimpan data transaksi
     private final NoteTransaksi noteTransaksi = new NoteTransaksi();
+    private String namaPengguna;
+    private double saldo;
 
-    private String namaPengguna;  // Nama pengguna
-    private double saldo;         // Saldo saat ini
-
-    /**
-     * Konstruktor untuk inisialisasi data pengguna dan saldo awal.
-     * @param n nama pengguna
-     * @param s saldo awal
-     */
     public ManajemenKeuangan(String n, double s) {
         this.namaPengguna = n;
         this.saldo = s;
@@ -28,10 +18,11 @@ public class ManajemenKeuangan {
 
     /**
      * Menambah pemasukan ke daftar transaksi dan memperbarui saldo.
+     * Tanggal transaksi ditambahkan secara otomatis.
      * @param jumlah jumlah uang yang ditambahkan
      */
     public void tambahPemasukan(double jumlah) {
-        noteTransaksi.getDaftarPemasukan().add(jumlah);
+        noteTransaksi.tambahTransaksi("Pemasukan", jumlah, "Umum", "-");
         saldo += jumlah;
         System.out.println("\n✅ Pemasukan ditambahkan: Rp " + jumlah);
     }
@@ -40,9 +31,10 @@ public class ManajemenKeuangan {
      * Menambah pengeluaran ke daftar transaksi dan memperbarui saldo.
      * @param jumlah jumlah uang yang dikeluarkan
      * @param keterangan deskripsi pengeluaran
+     * @param kategori kategori pengeluaran (misal: Belanja, Transportasi)
      */
-    public void tambahPengeluaran(double jumlah, String keterangan) {
-        noteTransaksi.getDaftarPengeluaran().add(jumlah);
+    public void tambahPengeluaran(double jumlah, String keterangan, String kategori) {
+        noteTransaksi.tambahTransaksi("Pengeluaran", jumlah, kategori, keterangan);
         saldo -= jumlah;
         System.out.println("💸 Pengeluaran ditambahkan: Rp " + jumlah + " untuk " + keterangan);
     }
@@ -55,8 +47,8 @@ public class ManajemenKeuangan {
         System.out.println("\n==== 📊 Laporan Keuangan ====");
         System.out.println("Nama Pengguna   : " + namaPengguna);
         System.out.println("Saldo Saat Ini  : Rp " + saldo);
-        System.out.println("Total Pemasukan : Rp " + noteTransaksi.hitungTotal(noteTransaksi.getDaftarPemasukan()));
-        System.out.println("Total Pengeluaran: Rp " + noteTransaksi.hitungTotal(noteTransaksi.getDaftarPengeluaran()));
+        System.out.println("Total Pemasukan : Rp " + noteTransaksi.hitungTotal("Pemasukan"));
+        System.out.println("Total Pengeluaran: Rp " + noteTransaksi.hitungTotal("Pengeluaran"));
         System.out.println("Sisa Keuangan   : Rp " + saldo);
     }
 
@@ -70,12 +62,11 @@ public class ManajemenKeuangan {
     }
 
     /**
-     * Menampilkan daftar semua transaksi pemasukan dan pengeluaran.
+     * Menampilkan daftar transaksi secara detail.
      */
     public void lihatTransaksi() {
-        System.out.println("\n=== 💼 Daftar Transaksi ===");
-        System.out.println("Pemasukan  : " + noteTransaksi.getDaftarPemasukan());
-        System.out.println("Pengeluaran: " + noteTransaksi.getDaftarPengeluaran());
+        System.out.println("\n=== 💼 Daftar Transaksi Detail ===");
+        noteTransaksi.tampilkanSemuaTransaksi();
     }
 
     /**
@@ -87,8 +78,7 @@ public class ManajemenKeuangan {
         System.out.println("Saldo telah direset menjadi Rp 0.");
     }
 
-    // ======== Getter & Setter ========
-
+    // Getter & Setter
     public String getNamaPengguna() {
         return namaPengguna;
     }
@@ -103,13 +93,5 @@ public class ManajemenKeuangan {
 
     public void setSaldo(double saldo) {
         this.saldo = saldo;
-    }
-
-    public ArrayList<Double> getDaftarPemasukan() {
-        return noteTransaksi.getDaftarPemasukan();
-    }
-
-    public ArrayList<Double> getDaftarPengeluaran() {
-        return noteTransaksi.getDaftarPengeluaran();
     }
 }
