@@ -112,4 +112,5 @@ public class ManajemenKeuangan {
     public ArrayList<Double> getDaftarPengeluaran() {
         return noteTransaksi.getDaftarPengeluaran();
     }
+
 }

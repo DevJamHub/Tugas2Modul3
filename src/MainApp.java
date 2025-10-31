@@ -14,6 +14,8 @@ public class MainApp {
         ManajemenKeuangan mk = new ManajemenKeuangan("Sigit", 250000);
 
         // Menambahkan beberapa transaksi contoh
+
+        System.out.println("Ini dari terminal");
         mk.tambahPemasukan(500000);
         mk.tambahPengeluaran(200000, "Belanja kebutuhan");
         mk.tambahPengeluaran(150000, "Tagihan listrik");
